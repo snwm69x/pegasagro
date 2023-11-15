@@ -1,0 +1,488 @@
+{
+	"info": {
+		"_postman_id": "be608a49-d400-4a52-ae2c-45b34d8bea75",
+		"name": "TestCasesForPegasAgro",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "22131199"
+	},
+	"item": [
+		{
+			"name": "Cars",
+			"item": [
+				{
+					"name": "getAllCars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is an array with at least one element\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Each object in the response array has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+									"    \r",
+									"    responseData.forEach(function(car) {\r",
+									"        pm.expect(car).to.have.property('id');\r",
+									"        pm.expect(car).to.have.property('number');\r",
+									"        pm.expect(car).to.have.property('manufactureDate');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Number is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    responseData.forEach(function(car) {\r",
+									"        pm.expect(car.number).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Number should not be empty\");\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "{{address}}/cars"
+					},
+					"response": []
+				},
+				{
+					"name": "createCar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 201\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - id, number, and manufactureDate\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.id).to.exist.and.to.be.a('number');\r",
+									"  pm.expect(responseData.number).to.exist.and.to.be.a('string');\r",
+									"  pm.expect(responseData.manufactureDate).to.exist.and.to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Number is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.number).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Number should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify that the id is a non-negative integer\", function () {\r",
+									"   const responseData = pm.response.json();\r",
+									"   \r",
+									"   pm.expect(responseData).to.be.an('object');\r",
+									"   pm.expect(responseData.id).to.be.a('number');\r",
+									"   pm.expect(responseData.id).to.be.at.least(0);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"number\": \"2280\",\r\n    \"manufactureDate\": \"2022-01-01T20:00:00.000+00:00\"\r\n}"
+						},
+						"url": "{{address}}/cars"
+					},
+					"response": []
+				},
+				{
+					"name": "getCarById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{address}}/cars/8"
+					},
+					"response": []
+				},
+				{
+					"name": "updateCar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - id, number, and manufactureDate\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.id).to.exist;\r",
+									"    pm.expect(responseData.number).to.exist;\r",
+									"    pm.expect(responseData.manufactureDate).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Number is a non-empty string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"\r",
+									"  pm.expect(responseData.number).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Number should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"ManufactureDate is in a valid date format\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.manufactureDate).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"ID is a non-negative integer\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.id).to.exist.and.to.be.a('number').and.to.be.at.least(0, \"ID should be a non-negative integer\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"number\": \"1234\",\r\n    \"manufactureDate\": \"2022-01-01T20:00:00.000+00:00\"\r\n}"
+						},
+						"url": "{{address}}/cars/2"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteCar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{address}}/cars/5"
+					},
+					"response": []
+				},
+				{
+					"name": "setOwnerOfCar",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{address}}/cars/2/owner/1"
+					},
+					"response": []
+				},
+				{
+					"name": "removeOwnerFromCar",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{address}}/cars/2/owner"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Owner",
+			"item": [
+				{
+					"name": "createOwner",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"John Doe\",\r\n    \"phoneNumber\": \"1234567890\",\r\n    \"email\": \"john.doe@example.com\"\r\n}"
+						},
+						"url": "{{address}}/owners"
+					},
+					"response": []
+				},
+				{
+					"name": "updateOwner",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"John William Doe\",\r\n    \"phoneNumber\": \"1234567890\",\r\n    \"email\": \"john.doe@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{address}}/owners/4"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteOwner",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{address}}/owners/4"
+					},
+					"response": []
+				},
+				{
+					"name": "getOwnerById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{address}}/owners/1"
+					},
+					"response": []
+				},
+				{
+					"name": "assignCarToOwner",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{address}}/owners/5/car/6"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteCarFromOwner",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{address}}/owners/5/car/6"
+					},
+					"response": []
+				},
+				{
+					"name": "addOwnerToDealer",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{address}}/owners/5/dealer/1"
+					},
+					"response": []
+				},
+				{
+					"name": "removeOwnerFromDealer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{address}}/owners/5/dealer/1"
+					},
+					"response": []
+				},
+				{
+					"name": "getAllOwners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{address}}/owners"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dealer",
+			"item": [
+				{
+					"name": "createDealer",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Dealer\",\r\n    \"email\": \"dealer@example.com\",\r\n    \"representativeName\": \"John Doe\"\r\n}"
+						},
+						"url": "{{address}}/dealers"
+					},
+					"response": []
+				},
+				{
+					"name": "getDealerById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{address}}/dealers/3"
+					},
+					"response": []
+				},
+				{
+					"name": "updateDealer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Dealer 2\",\r\n    \"email\": \"dealer@example.com\",\r\n    \"representativeName\": \"John Doe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{address}}/dealers/3"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteDealer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{address}}/dealers/3"
+					},
+					"response": []
+				},
+				{
+					"name": "getAllDealers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{address}}/dealers"
+					},
+					"response": []
+				},
+				{
+					"name": "getDealersByOwner",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{address}}/dealers/owner/1"
+					},
+					"response": []
+				},
+				{
+					"name": "addOwnerToDealer",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{address}}/dealers/4/owner/6"
+					},
+					"response": []
+				},
+				{
+					"name": "removeOwnerFromDealer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{address}}/dealers/4/owner/6"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "file",
+			"item": [
+				{
+					"name": "fileUpload",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

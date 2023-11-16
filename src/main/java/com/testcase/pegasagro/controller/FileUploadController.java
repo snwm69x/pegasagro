@@ -1,5 +1,7 @@
 package com.testcase.pegasagro.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,11 @@ public class FileUploadController {
 
     @PostMapping("/upload")
     public Double uploadFile(@RequestParam("file") MultipartFile file) {
-        return gpsLogServiceImpl.calculateDistance(file);
+        try {
+            gpsLogServiceImpl.processFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return gpsLogServiceImpl.getTotalDistance();
     }
 }
